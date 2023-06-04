@@ -25,6 +25,15 @@ void inputTriangleCoordinates(double* x1, double* y1, double* x2, double* y2, do
     scanf("%lf %lf", x3, y3);
 }
 
+// Функція для перевірки існування трикутника
+int isTriangleValid(double side1, double side2, double side3) {
+    if (side1 + side2 > side3 && side1 + side3 > side2 && side2 + side3 > side1) {
+        return 1; // Трикутник існує
+    } else {
+        return 0; // Трикутник не існує
+    }
+}
+
 // Функція для обчислення площі та порівняння площ двох трикутників
 void compareTriangleAreas() {
     double x1, y1, x2, y2, x3, y3;
@@ -35,6 +44,12 @@ void compareTriangleAreas() {
     double side1 = calculateDistance(x1, y1, x2, y2);
     double side2 = calculateDistance(x2, y2, x3, y3);
     double side3 = calculateDistance(x3, y3, x1, y1);
+
+    if (!isTriangleValid(side1, side2, side3)) {
+        printf("Перший трикутник не існує.\n");
+        return;
+    }
+
     area1 = calculateTriangleArea(side1, side2, side3);
 
     printf("Введіть координати вершин другого трикутника:\n");
@@ -42,6 +57,12 @@ void compareTriangleAreas() {
     side1 = calculateDistance(x1, y1, x2, y2);
     side2 = calculateDistance(x2, y2, x3, y3);
     side3 = calculateDistance(x3, y3, x1, y1);
+
+    if (!isTriangleValid(side1, side2, side3)) {
+        printf("Другий трикутник не існує.\n");
+        return;
+    }
+
     area2 = calculateTriangleArea(side1, side2, side3);
 
     if (area1 > area2) {

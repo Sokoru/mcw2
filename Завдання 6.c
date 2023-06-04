@@ -3,18 +3,15 @@
 
 // Функція для обчислення довжини відрізка за координатами його кінців
 double calculateDistance(double x1, double y1, double x2, double y2) {
-    return sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2));
+    double distance = sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2));
+    return distance;
 }
 
-// Функція для обчислення площі трикутника за відомими розмірами сторін
-double calculateTriangleArea(double a, double b, double c) {
-    double p = (a + b + c) / 2;  // Півпериметр трикутника
-    return sqrt(p * (p - a) * (p - b) * (p - c));
-}
-
-// Функція для перевірки на існування трикутника за допомогою умови тріїнкової нерівності
-int isTriangleValid(double a, double b, double c) {
-    return (a + b > c) && (b + c > a) && (c + a > b);
+// Функція для обчислення площі трикутника за заданими розмірами сторін
+double calculateTriangleArea(double side1, double side2, double side3) {
+    double s = (side1 + side2 + side3) / 2; // Півпериметр
+    double area = sqrt(s * (s - side1) * (s - side2) * (s - side3)); // Формула Герона
+    return area;
 }
 
 // Функція для введення координат вершин трикутника
@@ -28,35 +25,36 @@ void inputTriangleCoordinates(double* x1, double* y1, double* x2, double* y2, do
     scanf("%lf %lf", x3, y3);
 }
 
-// Функція для виведення координат вершин трикутника
-void printTriangleCoordinates(double x1, double y1, double x2, double y2, double x3, double y3) {
-    printf("Координати вершин трикутника:\n");
-    printf("A(%.2lf, %.2lf);\n", x1, y1);
-    printf("B(%.2lf, %.2lf);\n", x2, y2);
-    printf("C(%.2lf, %.2lf);\n", x3, y3);
+// Функція для обчислення площі та порівняння площ двох трикутників
+void compareTriangleAreas() {
+    double x1, y1, x2, y2, x3, y3;
+    double area1, area2;
+
+    printf("Введіть координати вершин першого трикутника:\n");
+    inputTriangleCoordinates(&x1, &y1, &x2, &y2, &x3, &y3);
+    double side1 = calculateDistance(x1, y1, x2, y2);
+    double side2 = calculateDistance(x2, y2, x3, y3);
+    double side3 = calculateDistance(x3, y3, x1, y1);
+    area1 = calculateTriangleArea(side1, side2, side3);
+
+    printf("Введіть координати вершин другого трикутника:\n");
+    inputTriangleCoordinates(&x1, &y1, &x2, &y2, &x3, &y3);
+    side1 = calculateDistance(x1, y1, x2, y2);
+    side2 = calculateDistance(x2, y2, x3, y3);
+    side3 = calculateDistance(x3, y3, x1, y1);
+    area2 = calculateTriangleArea(side1, side2, side3);
+
+    if (area1 > area2) {
+        printf("Перший трикутник має більшу площу.\n");
+    } else if (area2 > area1) {
+        printf("Другий трикутник має більшу площу.\n");
+    } else {
+        printf("Обидва трикутники мають однакову площу.\n");
+    }
 }
 
 int main() {
-    double x1, y1, x2, y2, x3, y3;
-
-    inputTriangleCoordinates(&x1, &y1, &x2, &y2, &x3, &y3);
-    printTriangleCoordinates(x1, y1, x2, y2, x3, y3);
-
-    // Обчислення довжин відрізків AB, BC, CA
-    double AB = calculateDistance(x1, y1, x2, y2);
-    double BC = calculateDistance(x2, y2, x3, y3);
-    double CA = calculateDistance(x3, y3, x1, y1);
-
-    // Перевірка на існування трикутника
-    if (!isTriangleValid(AB, BC, CA)) {
-        printf("Трикутник не існує.\n");
-        return 0;
-    }
-
-    // Обчислення площі трикутника ABC
-    double areaABC = calculateTriangleArea(AB, BC, CA);
-
-    printf("Площа трикутника ABC: %.2lf\n", areaABC);
+    compareTriangleAreas();
 
     return 0;
 }
